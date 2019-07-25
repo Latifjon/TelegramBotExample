@@ -36,7 +36,7 @@ namespace TelegramBotExample.Logics.BotCommands
         /// </summary>
         private void AskPhoneNumber(Message message)
         {
-            var shareContact = new KeyboardButton("shared your contact");
+            var shareContact = new KeyboardButton("Share your contact");
             shareContact.RequestContact = true;
 
             var keyboard = new ReplyKeyboardMarkup(new[] { shareContact });

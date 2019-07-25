@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using TelegramBotExample.Logics.RestApiCient.Models;
 
 namespace TelegramBotExample.Database.Tables
 {
@@ -36,6 +37,11 @@ namespace TelegramBotExample.Database.Tables
         /// 
         /// </summary>
         public string CallBackCommand { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UserInfo UserInfo { get; set; }
 
         /// <summary>
         /// 
