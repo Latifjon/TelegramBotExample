@@ -52,6 +52,7 @@ namespace TelegramBotExample
                 return;
             }
 
+
             var command = CommandFactory.GetPublicCommand(e.Message.Text);
             if (command != null)
             {
