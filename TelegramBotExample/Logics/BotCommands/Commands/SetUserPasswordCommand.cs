@@ -53,17 +53,29 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
         /// <param name="user"></param>
         private void ShowMenu(Message message, UserTable user)
         {
-            var keyboard = new ReplyKeyboardMarkup
+            //var keyboard = new ReplyKeyboardMarkup
+            //{
+            //    Keyboard = new[] {
+            //        new[] // row 1
+            //        {
+            //            new KeyboardButton("Users"),
+            //            new KeyboardButton("Audit")
+            //        },
+            //    },
+            //    ResizeKeyboard = true
+            //};
+            var keyboard = new InlineKeyboardMarkup(new[]
             {
-                Keyboard = new[] {
-                    new[] // row 1
-                    {
-                        new KeyboardButton("Users"),
-                        new KeyboardButton("Audit")
-                    },
+                new[]
+                {
+                    new InlineKeyboardButton{ Text="Users", CallbackData = "users"}
                 },
-                ResizeKeyboard = true
-            };
+                new[]
+                {
+                    new InlineKeyboardButton{Text="Audit",CallbackData="audit"}
+                }
+            });
+
             BotClient.SendTextMessageAsync(message.Chat.Id, "Choise Menu", replyMarkup:keyboard);
             
         }
