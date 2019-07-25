@@ -53,9 +53,6 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
         /// <param name="user"></param>
         private void ShowMenu(Message message, UserTable user)
         {
-            user.Command = null;
-            UserRepository.UpdateUser(user);
-
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
@@ -67,7 +64,7 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
                 },
                 ResizeKeyboard = true
             };
-            BotClient.SendTextMessageAsync(message.Chat.Id, "Choise Menu", replyMarkup: keyboard);
+            BotClient.SendTextMessageAsync(message.Chat.Id, "Choise Menu", replyMarkup:keyboard);
             
         }
     }
