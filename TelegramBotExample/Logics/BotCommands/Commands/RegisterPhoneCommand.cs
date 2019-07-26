@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramBotExample.Database.Tables;
 using TelegramBotExample.Logics.BotCommands.Abstracts;
 
@@ -33,7 +34,7 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
             user.PhoneNumber = message.Contact.PhoneNumber;
             user.Command = null;
             UserRepository.UpdateUser(user);
-            BotClient.SendTextMessageAsync(message.Chat.Id, "Conguratulation you succed registered!");
+            BotClient.SendTextMessageAsync(message.Chat.Id, "Conguratulation you succed registered!", replyMarkup:new ReplyKeyboardRemove());
 
             AskUserName(message, user);
         }

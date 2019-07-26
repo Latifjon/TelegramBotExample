@@ -19,7 +19,7 @@ namespace TelegramBotExample.Logics.RestApiCient
         /// <param name="user"></param>
         /// <returns></returns>
         [Post("/Authentication/Authenticate")]
-        Task<AuthenticateResult> Auhenticate([Body] UserInfo user);
+        Task<AuthenticateResult> Auhenticate([Body] LoginInfo user);
 
         /// <summary>
         /// 
@@ -27,6 +27,14 @@ namespace TelegramBotExample.Logics.RestApiCient
         /// <param name="user"></param>
         /// <returns></returns>
         [Get("/Authentication/CheckUserNameIsExist")]
-        Task<bool> CheckUserNameIsExist([Body] UserInfo user);
+        Task<bool> CheckUserNameIsExist([Body] LoginInfo user);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Get("/Authentication/GetUsers")]
+        [Headers("Authorization: Bearer")]
+        Task<List<UserInfo>> GetUsers();
     }
 }

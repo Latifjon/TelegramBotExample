@@ -24,7 +24,7 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
             if (user == null)
                 return;
             
-            user.UserInfo = new UserInfo
+            user.UserInfo = new LoginInfo
             {
                 UserName = message.Text,
                 Password = null

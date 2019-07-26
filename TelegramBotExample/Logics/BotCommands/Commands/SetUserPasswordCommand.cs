@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Threading.Tasks;
+using Refit;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using TelegramBotExample.Database.Tables;
@@ -22,28 +19,55 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
         /// </summary>
         /// <param name="message"></param>
         /// <param name="user"></param>
-        public override void Execute(Message message, UserTable user)
+        public override async void Execute(Message message, UserTable user)
         {
             if (user == null)
                 return;
 
-            user.UserInfo.Password = message.Text;
-            UserRepository.UpdateUser(user);
-            var authenticate = AuthenticationClient.Auhenticate(user.UserInfo);
-
-            if (authenticate.Result.Username == null)
+            try
             {
-                BotClient.DeleteMessageAsync(message.Chat.Id, message.MessageId);
-                BotClient.SendTextMessageAsync(message.Chat.Id, "User or Password incorrect! \n Enter Username");
+                var result = await PassAuthentication(message, user);
+                UpdateUserAndSendSuccess(message, user, result);
+            }
+            catch (ApiException exception)
+            {
+                await BotClient.DeleteMessageAsync(message.Chat.Id, message.MessageId);
+                await BotClient.SendTextMessageAsync(message.Chat.Id, $"{exception.Content}");
+                await BotClient.SendTextMessageAsync(message.Chat.Id, "Enter Username");
                 user.Command = nameof(SetUserNameCommand);
                 UserRepository.UpdateUser(user);
                 return;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="user"></param>
+        private async Task<AuthenticateResult> PassAuthentication(Message message, UserTable user)
+        {
+            user.UserInfo.Password = message.Text;
+            return await AuthenticationClient.Auhenticate(user.UserInfo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="user"></param>
+        /// <param name="result"></param>
+        private void UpdateUserAndSendSuccess(Message message, UserTable user, AuthenticateResult result)
+        {
+            user.Command = null;
+            user.Token = result.Token;
+            UserRepository.UpdateUser(user);
 
             BotClient.DeleteMessageAsync(message.Chat.Id, message.MessageId);
             BotClient.SendTextMessageAsync(message.Chat.Id, "Congritulations to have passed the authentication!");
 
-            ShowMenu(message, user);
+            var menuCommand = new MenuCommand();
+            menuCommand.Execute(message,user);
         }
 
         /// <summary>
@@ -53,31 +77,17 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
         /// <param name="user"></param>
         private void ShowMenu(Message message, UserTable user)
         {
-            //var keyboard = new ReplyKeyboardMarkup
-            //{
-            //    Keyboard = new[] {
-            //        new[] // row 1
-            //        {
-            //            new KeyboardButton("Users"),
-            //            new KeyboardButton("Audit")
-            //        },
-            //    },
-            //    ResizeKeyboard = true
-            //};
             var keyboard = new InlineKeyboardMarkup(new[]
             {
                 new[]
                 {
-                    new InlineKeyboardButton{ Text="Users", CallbackData = "users"}
-                },
-                new[]
-                {
-                    new InlineKeyboardButton{Text="Audit",CallbackData="audit"}
+                    new InlineKeyboardButton{ Text="Users", CallbackData = "UsersCallBackCommand"},
+                    new InlineKeyboardButton{Text="Audit", CallbackData = "AuditCallBackCommand"},
                 }
             });
 
-            BotClient.SendTextMessageAsync(message.Chat.Id, "Choise Menu", replyMarkup:keyboard);
-            
+            BotClient.SendTextMessageAsync(message.Chat.Id, "Choise Menu", replyMarkup: keyboard);
+
         }
     }
 }

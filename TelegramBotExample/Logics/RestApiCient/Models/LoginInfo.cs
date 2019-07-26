@@ -7,7 +7,7 @@ namespace TelegramBotExample.Logics.RestApiCient.Models
     /// <summary>
     /// 
     /// </summary>
-    public class UserInfo
+    public class LoginInfo
     {
         /// <summary>
         /// 
@@ -17,6 +17,6 @@ namespace TelegramBotExample.Logics.RestApiCient.Models
         /// <summary>
         /// 
         /// </summary>
-        public string Phone { get; set; }
+        public string Password { get; set; }
     }
 }

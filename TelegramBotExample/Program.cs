@@ -3,6 +3,7 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using TelegramBotExample.Logics.BotCommands;
+using TelegramBotExample.Logics.BotCommands.Commands;
 using TelegramBotExample.Logics.BotCommands.Factory;
 using TelegramBotExample.Logics.Repositories;
 
@@ -45,13 +46,18 @@ namespace TelegramBotExample
             var userRepository = new UserRepository();
             var user = userRepository.FindUser(e.Message.Chat.Id);
 
-            if (e.Message.Text == "/start")
+            switch (e.Message.Text)
             {
-                var startCommand = new StartCommand();
-                startCommand.Execute(e.Message, user);
-                return;
+                case "/start":
+                    var startCommand = new StartCommand();
+                    startCommand.Execute(e.Message, user);
+                    return;
+                case "/menu":
+                    var menuCommand = new MenuCommand();
+                    menuCommand.Execute(e.Message,user);
+                    break;
             }
-            
+
             var command = CommandFactory.GetPublicCommand(e.Message.Text);
             if (command != null)
             {
@@ -70,7 +76,16 @@ namespace TelegramBotExample
         /// <param name="e"></param>
         private static void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs e)
         {
+            var userRepository = new UserRepository();
+            var user = userRepository.FindUser(e.CallbackQuery.Message.Chat.Id);
+            if (user != null)
+            {
+                user.CallBackCommand = e.CallbackQuery.Data;
+                userRepository.UpdateUser(user);
+            }
 
+            var callBackCommand = CommandFactory.GetCallBackCommand(user?.CallBackCommand);
+            callBackCommand?.CallBackExecute(e.CallbackQuery,user);
         }
     }
 }

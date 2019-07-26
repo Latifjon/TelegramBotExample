@@ -41,7 +41,12 @@ namespace TelegramBotExample.Database.Tables
         /// <summary>
         /// 
         /// </summary>
-        public UserInfo UserInfo { get; set; }
+        public LoginInfo UserInfo { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Token { get; set; }
 
         /// <summary>
         /// 

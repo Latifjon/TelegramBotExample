@@ -20,7 +20,10 @@ namespace TelegramBotExample.Logics.BotCommands
         public override void Execute(Message message, UserTable user)
         {
             if (user != null)
+            {
+                BotClient.SendTextMessageAsync(message.Chat.Id, $"You have already registered. \n You are in {user?.Command}, {user?.CallBackCommand}");
                 return;
+            }
 
             user = new UserTable();
             user.ChatId = message.Chat.Id;
