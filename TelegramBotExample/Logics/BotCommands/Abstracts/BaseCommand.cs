@@ -20,7 +20,7 @@ namespace TelegramBotExample.Logics.BotCommands.Abstracts
         /// <summary>
         /// 
         /// </summary>
-        public IAuthentication AuthenticationClient = RestService.For<IAuthentication>("https://localhost:44343");
+        public IAuthentication AuthenticationClient = RestService.For<IAuthentication>("http://localhost:52855");
 
         /// <summary>
         /// 

@@ -60,7 +60,7 @@ namespace TelegramBotExample.Logics.BotCommands.Commands.CallBackCommands
         /// <returns></returns>
         private async Task<List<UserInfo>> GetUsers(string accessToken)
         {
-            var api = RestService.For<IAuthentication>("https://localhost:44343", new RefitSettings()
+            var api = RestService.For<IAuthentication>("http://localhost:52855", new RefitSettings()
             {
                 AuthorizationHeaderValueGetter = () => Task.FromResult(accessToken)
             });
