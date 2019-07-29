@@ -30,7 +30,7 @@ namespace TelegramBotExample.Logics.BotCommands.Commands.CallBackCommands
                 var res = await GetUsers(user.Token);
                 foreach (var userInfo in res)
                 {
-                    await BotClient.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Username: {userInfo.UserName} \n Phone: {userInfo.Phone}");
+                    await BotClient.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Username: {userInfo.UserName} \nPhone: {userInfo.Phone}");
                 }
 
             }
