@@ -19,22 +19,22 @@ namespace TelegramBotExample.Logics.BotCommands.Commands
         /// </summary>
         /// <param name="message"></param>
         /// <param name="user"></param>
-        public override void Execute(Message message, UserTable user)
+        public override async void Execute(Message message, UserTable user)
         {
             if (user == null)
                 return;
-            
+
             user.UserInfo = new LoginInfo
             {
                 UserName = message.Text,
                 Password = null
             };
             UserRepository.UpdateUser(user);
-            var checkUserName = AuthenticationClient.CheckUserNameIsExist(user.UserInfo);
-            if (checkUserName.Result == false)
+            var checkUserName = await AuthenticationClient.CheckUserNameIsExist(user.UserInfo);
+            if (checkUserName == false)
             {
-                BotClient.SendTextMessageAsync(message.Chat.Id,
-                    $"{message.Text} username doesn't exist in Server. Please enter exist Username");
+                 await BotClient.SendTextMessageAsync(message.Chat.Id,
+                     $"{message.Text} username doesn't exist in Server. Please enter exist Username");
                 return;
             }
 
